@@ -85,9 +85,16 @@ async function getMatchedVersion() {
 
 async function getVfile() {
     console.info(`querying node versions from ${nodeDistUrl}/ ...`);
-    const html = await fetch(nodeDistUrl).then(x => x.text());
+    const html = await new Promise((ok, rej) => {
+        const req = https.get(`${nodeDistUrl}/`, res => {
+            let data = '';
+            res.on('data', d => data += d);
+            res.on('close', () => ok(data));
+        });
+        req.on('error', err => rej(err));
+        req.end();
+    });
     fs.writeFileSync(vfile, html, { encoding: 'utf-8' });
-
 }
 
 function findMatchedVersion() {
