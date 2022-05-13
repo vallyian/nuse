@@ -38,11 +38,12 @@ async function exec() {
     if (!fs.existsSync(nodePath)) {
         if (!fs.existsSync(`${nodePath}.zip`)) {
             console.info(`downloading ${nodeDistUrl}/${matchedVersion}/${versionArch}.zip ...`);
-            await download(`${nodeDistUrl}/${matchedVersion}/${versionArch}.zip`, `${versionArch}.zip`);
+            await download(`${nodeDistUrl}/${matchedVersion}/${versionArch}.zip`, `${nodePath}.zip`);
         }
 
         console.info(`unpacking ${versionArch}.zip ...`);
-        await execCmd('tar', '-xf', `${versionArch}.zip`);
+        await execCmd('tar', '-xf', `${nodePath}.zip`);
+        if (process.cwd() !== __dirname) fs.renameSync(path.join(process.cwd(), versionArch), nodePath);
         fs.rmSync(`${nodePath}.zip`, { force: true });
     }
 

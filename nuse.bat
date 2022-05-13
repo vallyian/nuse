@@ -13,6 +13,7 @@ if not exist "%userprofile%\.nuse" (
     set "nuseInitRegistry=1"
 )
 pushd "%~dp0"
+set "currentPath=%~dp0%~nx0"
 if not exist "%userprofile%\.nuse\nuse.bat" (
     copy "%~dp0%~nx0" "%userprofile%\.nuse\nuse.bat" >nul
     set "nuseInitRegistry=1"
@@ -49,3 +50,10 @@ FOR /F "tokens=*" %%x IN ('node -v') do (SET nodever=%%x)
 FOR /F "tokens=*" %%x IN ('npm -v') do (SET npmver=%%x)
 echo node: %nodever%
 echo  npm: v%npmver%
+
+::cleanup
+if not "%currentPath%"=="%userprofile%\.nuse\nuse.bat" (
+	pause
+	del "%currentPath%"
+	exit
+)
