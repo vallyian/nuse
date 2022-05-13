@@ -8,9 +8,8 @@ Windows 10 +
 
 ## Install
 
-1. add `%nuseDir%` and `%nodeDir%` to `PATH`
-2. `curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat`
-3. `nuse 18`
+1. `curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat`
+2. `nuse 18`
 
 ## Use
 

@@ -3,7 +3,8 @@ const child_process = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const { nuseDir: cwd, nodeDistUrl, nuseDirFile, wantedNodeVersion } = process.env;
+const { nuseInitRegistry, nodeDistUrl, nuseDirFile, wantedNodeVersion } = process.env;
+const cwd = __dirname;
 const vfile = path.join(cwd, '.v');
 const getWantedNodeVersion = (() => {
     switch (wantedNodeVersion) {
@@ -25,6 +26,8 @@ Promise.resolve().then(exec).catch(e => {
 });
 
 function exec() {
+    if (nuseInitRegistry) initRegistry();
+
     if (!wantedNodeVersion) assert.fail(`USAGE: nuse version`);
 
     const matchedVersion = getMatchedVersion();
@@ -44,6 +47,14 @@ function exec() {
 
     fs.writeFileSync(nuseDirFile, nodePath, { encoding: 'utf-8' });
 };
+
+function initRegistry() {
+    const userPath = child_process.execSync(`reg query HKCU\\Environment /v Path`).toString().trim().split(/    /g)[3];
+    let addReg = '';
+    if (!(/\%nuseDir\%\;/i.test(userPath))) addReg += '^%nuseDir^%;';
+    if (!(/\%nodeDir\%\;/i.test(userPath))) addReg += '^%nodeDir^%;';
+    if (addReg) child_process.execSync(`reg add HKCU\\Environment /t REG_EXPAND_SZ /f /v Path /d "${userPath}"${addReg}`, { stdio: 'ignore' });
+}
 
 function getMatchedVersion() {
     let recent;
