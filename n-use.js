@@ -3,10 +3,10 @@ const child_process = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const { nuseDir: cwd, nodeDistUrl, nuseDirFile, wantedVersion } = process.env;
+const { nuseDir: cwd, nodeDistUrl, nuseDirFile, wantedNodeVersion } = process.env;
 const vfile = path.join(cwd, '.v');
-const getWantedVersion = (() => {
-    switch (wantedVersion) {
+const getWantedNodeVersion = (() => {
+    switch (wantedNodeVersion) {
         case 'argon': return 4;
         case 'boron': return 6;
         case 'carbon': return 8;
@@ -15,7 +15,7 @@ const getWantedVersion = (() => {
         case 'fermium': return 14;
         case 'gallium': return 16;
         case 'hydrogen': return 18;
-        default: return wantedVersion;
+        default: return wantedNodeVersion;
     }
 })();
 
@@ -25,7 +25,7 @@ Promise.resolve().then(exec).catch(e => {
 });
 
 function exec() {
-    if (!wantedVersion) assert.fail(`invalid version arg`);
+    if (!wantedNodeVersion) assert.fail(`USAGE: nuse version`);
 
     const matchedVersion = getMatchedVersion();
     const versionArch = `node-${matchedVersion}-win-x64`;
@@ -42,8 +42,6 @@ function exec() {
         fs.rmSync(`${nodePath}.zip`, { force: true });
     }
 
-    // console.info(`setting node path to ${nodePath} ...`);
-    // child_process.execSync(`setx nusev ${nodePath}`, { stdio: 'ignore' });
     fs.writeFileSync(nuseDirFile, nodePath, { encoding: 'utf-8' });
 };
 
@@ -80,5 +78,5 @@ function findMatchedVersion() {
             return p;
         }, [])
         .sort((a, b) => b.localeCompare(a))
-        .find(x => new RegExp(`^v?${getWantedVersion}.*$`, 'i').test(x));
+        .find(x => new RegExp(`^v?${getWantedNodeVersion}.*$`, 'i').test(x));
 }

@@ -9,9 +9,8 @@ Windows 10 +
 ## Install
 
 1. add `%nuseDir%` and `%nodeDir%` to `PATH`
-2. `mkdir %userprofile%\\.node`
-3. `curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o "%userprofile%\\.node\\nuse.bat"`
-4. `"%userprofile%\\.node\\nuse" 18` (then restart cmd for `nuse` cmd)
+2. `curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat`
+3. `nuse 18`
 
 ## Use
 
