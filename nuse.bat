@@ -44,5 +44,8 @@ set /p nodeDir=<"%nuseDirFile%"
 setx nodeDir "%nodeDir%" >nul
 set "PATH=%nodeDir%;%path%"
 
-::print version
-node -v
+::print versions
+FOR /F "tokens=*" %%x IN ('node -v') do (SET nodever=%%x)
+FOR /F "tokens=*" %%x IN ('npm -v') do (SET npmver=%%x)
+echo node: %nodever%
+echo  npm: v%npmver%
