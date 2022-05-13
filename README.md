@@ -1,6 +1,11 @@
 # n-use (nuse)
 
-Node version switcher for Windows
+Node version switcher / manager for Windows.  
+
+It finds and downloads the latest version according to specified version.  
+The latest `nuse` is persisted to env, so a new cmd will inherit it automatically.  
+Current cmd will keep its own version (if set) or will use the version set in env.  
+Different cmd instances can use different node versions.  
 
 ## Prerequisites
 
@@ -12,11 +17,6 @@ Windows 10 +
 2. `nuse` *wanted-version* (ie `nuse 18`)
 
 ## Use
-
-It finds and downloads the latest version according to specified version.  
-The latest `nuse` is persisted to env, so a new cmd will inherit it automatically.  
-Current cmd will keep its own version (if set) or will use the version set in env.  
-Different cmd instances can use different node versions.  
 
 * `nuse gallium` => `v16.9.1`
 * `nuse 16` => `v16.9.1`
