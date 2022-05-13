@@ -1,8 +1,8 @@
 const assert = require('assert');
 const child_process = require('child_process');
 const fs = require('fs');
+const https = require('https');
 const path = require('path');
-const zlib = require('zlib');
 
 const { nuseInitRegistry, nodeDistUrl, nuseDirFile, wantedNodeVersion } = process.env;
 const cwd = __dirname;
@@ -112,7 +112,11 @@ function getHtmlLinks(html) {
         }, []);
 }
 
-async function download(url, file) {
-    const arrayBuffer = await fetch(url).then(r => r.arrayBuffer());
-    fs.writeFileSync(file, Buffer.from(arrayBuffer));
+function download(url, file) {
+    return new Promise((ok, rej) => https.get(url, response => {
+        const stream = fs.createWriteStream(file);
+        response.pipe(stream);
+        stream.on('error', err => rej(err));
+        stream.on('finish', () => stream.close(ok));
+    }));
 }
