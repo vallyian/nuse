@@ -1,15 +1,15 @@
 # n-use (nuse)
 
-Node version switcher / manager for Windows.  
+[Node.js](https://nodejs.org/) version switcher / manager for Windows.  
 
 It finds and downloads the latest version according to specified version.  
-The latest `nuse` is persisted to env, so a new cmd will inherit it automatically.  
+The last used `node` is persisted to env, so a new cmd will inherit it automatically.  
 Current cmd will keep its own version (if set) or will use the version set in env.  
 Different cmd instances can use different node versions.  
 
 ## Prerequisites
 
-Windows 10 +
+Windows 10+ x64
 
 ## Install
 
