@@ -21,14 +21,17 @@ const friendlyNames = {
 };
 
 Promise.resolve().then(exec).catch(e => {
-    console.error(e.message || e);
+    console.error(`\x1b[31m${e.message || e}\x1b[0m`);
     process.exit(1);
 });
 
 async function exec() {
-    if (!(/win/i.test(os.platform()))) assert.fail(`for non Windows platforms use nvm instead`);
-    if (nuseInitRegistry) await initRegistry();
-    if (!versionArg) assert.fail(`USAGE:   nuse   number | semver | friendly-name | -v`);
+    if (!(/win/i.test(os.platform())))
+        assert.fail(`for non Windows platforms use nvm instead`);
+    if (nuseInitRegistry)
+        await initRegistry();
+    if (!versionArg || versionArg === '-h')
+        assert.fail(`\x1b[31mUSAGE:     nuse   number | semver | friendly-name | -v | -h\x1b[0m`);
 
     let nodePath = '';
     if (versionArg === '-v') {

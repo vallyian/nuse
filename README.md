@@ -18,6 +18,8 @@ Windows 10+ x64
 
 ## Use
 
+`nuse   number | semver | friendly-name | -v | -h`
+
 * `nuse gallium` => `v16.9.1`
 * `nuse 16` => `v16.9.1`
 * `nuse 16.9` => `v16.9.1`
