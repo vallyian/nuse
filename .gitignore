@@ -1,4 +1,3 @@
 node*
-*.exe
 v
-.v
+v.*

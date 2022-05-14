@@ -2,24 +2,23 @@ const assert = require('assert');
 const child_process = require('child_process');
 const fs = require('fs');
 const https = require('https');
+const os = require('os');
 const path = require('path');
 
-const { nuseInitRegistry, nodeDistUrl, nuseDirFile, wantedNodeVersion } = process.env;
+const { nuseInitRegistry, nodeDistUrl, nuseDirFile } = process.env;
+const [versionArg] = process.argv.splice(2);
 const cwd = __dirname;
 const vfile = path.join(cwd, 'v.html');
-const getWantedNodeVersion = (() => {
-    switch (wantedNodeVersion) {
-        case 'argon': return 4;
-        case 'boron': return 6;
-        case 'carbon': return 8;
-        case 'dubnium': return 10;
-        case 'erbium': return 12;
-        case 'fermium': return 14;
-        case 'gallium': return 16;
-        case 'hydrogen': return 18;
-        default: return wantedNodeVersion;
-    }
-})();
+const friendlyNames = {
+    argon: 4,
+    boron: 6,
+    carbon: 8,
+    dubnium: 10,
+    erbium: 12,
+    fermium: 14,
+    gallium: 16,
+    hydrogen: 18
+};
 
 Promise.resolve().then(exec).catch(e => {
     console.error(e.message || e);
@@ -27,85 +26,115 @@ Promise.resolve().then(exec).catch(e => {
 });
 
 async function exec() {
+    if (!(/win/i.test(os.platform()))) assert.fail(`for non Windows platforms use nvm instead`);
     if (nuseInitRegistry) await initRegistry();
+    if (!versionArg) assert.fail(`USAGE:   nuse   number | semver | friendly-name | -v`);
 
-    if (!wantedNodeVersion) assert.fail(`USAGE: nuse version`);
+    let nodePath = '';
+    if (versionArg === '-v') {
+        nodePath = await execCmd('reg', 'query', 'HKCU\\Environment', '/v', 'nodeDir')
+            .then(x => x.trim().split(/\s{4}/g)[3]);
+    } else {
+        const matchedVersion = await getMatchedVersion();
+        const versionArch = `node-${matchedVersion}-win-${os.arch()}`;
+        nodePath = path.join(cwd, versionArch);
 
-    const matchedVersion = await getMatchedVersion();
-    const versionArch = `node-${matchedVersion}-win-x64`;
-    const nodePath = path.join(cwd, versionArch);
-
-    if (!fs.existsSync(nodePath)) {
-        if (!fs.existsSync(`${nodePath}.zip`)) {
-            console.info(`downloading ${nodeDistUrl}/${matchedVersion}/${versionArch}.zip ...`);
-            await download(`${nodeDistUrl}/${matchedVersion}/${versionArch}.zip`, `${nodePath}.zip`);
+        if (!fs.existsSync(nodePath)) {
+            if (!fs.existsSync(`${nodePath}.zip`)) {
+                console.info(`downloading ${nodeDistUrl}/${matchedVersion}/${versionArch}.zip ...`);
+                await downloadBinary(`${nodeDistUrl}/${matchedVersion}/${versionArch}.zip`, `${nodePath}.zip`);
+            }
+            console.info(`unpacking ${versionArch}.zip ...`);
+            await execCmd('tar', '-xf', `${nodePath}.zip`);
+            if (process.cwd() !== __dirname) fs.renameSync(path.join(process.cwd(), versionArch), nodePath);
+            fs.rmSync(`${nodePath}.zip`, { force: true });
         }
-
-        console.info(`unpacking ${versionArch}.zip ...`);
-        await execCmd('tar', '-xf', `${nodePath}.zip`);
-        if (process.cwd() !== __dirname) fs.renameSync(path.join(process.cwd(), versionArch), nodePath);
-        fs.rmSync(`${nodePath}.zip`, { force: true });
-    }
+    };
 
     fs.writeFileSync(nuseDirFile, nodePath, { encoding: 'utf-8' });
 };
 
+/**
+ * Exec cmd in current dir
+ * @param {string} cmd 
+ * @param  {...string} args 
+ * @returns {Promise<string>} Promise<string> stdOut
+ */
 function execCmd(cmd, ...args) {
     return new Promise((ok, rej) => child_process.execFile(
         cmd,
         args,
         { shell: false },
-        (err, out) => err ? rej(err) : ok(out)
+        (err, out) => err ? rej(err) : ok(String(out).trim())
     ));
 }
 
+/**
+ * Add nuse and node binary path placeholders to user evn
+ * @returns {Promise<void>} Promise<void>
+ */
 async function initRegistry() {
-    const userPath = await execCmd('reg', 'query', 'HKCU\\Environment', '/v', 'Path').then(x => x.trim().split(/    /g)[3]);
+    const userPath = await execCmd('reg', 'query', 'HKCU\\Environment', '/v', 'Path')
+        .then(x => x.trim().split(/\s{4}/g)[3]);
     let addReg = '';
-    if (!(/%nuseDir%;/i.test(userPath))) addReg += '%nuseDir%;';
-    if (!(/%nodeDir%;/i.test(userPath))) addReg += '%nodeDir%;';
-    if (addReg) await execCmd('reg', 'add', 'HKCU\\Environment', '/t', 'REG_EXPAND_SZ', '/f', '/v', 'Path', '/d', `${userPath}${addReg}`);
+    if (!(/%nuseDir%;/i.test(userPath)))
+        addReg += '%nuseDir%;';
+    if (!(/%nodeDir%;/i.test(userPath)))
+        addReg += '%nodeDir%;';
+    if (addReg)
+        await execCmd('reg', 'add', 'HKCU\\Environment', '/t', 'REG_EXPAND_SZ', '/f', '/v', 'Path', '/d', `${userPath}${addReg}`);
 }
 
+/**
+ * Get exact or highest aproximate version
+ * @returns {string} stirng
+ */
 async function getMatchedVersion() {
-    let recent;
-    if (!fs.existsSync(vfile)) {
+    if (!fs.existsSync(vfile))
         await getVfile();
-        recent = true;
-    }
-
     let ret = findMatchedVersion();
-    if (!ret && !recent) {
-        await getVfile();
+    if (!ret) {
+        const recent = new Date();
+        recent.setHours(recent.getHours() - 8);
+        if (fs.statSync(vfile).mtime < recent)
+            await getVfile();
         ret = findMatchedVersion();
     }
-
     return ret ?? assert.fail('version not found');
 }
 
+/**
+ * Save Node.js downloads page to disk
+ * @returns {Promise<void>} Promise<void>
+ */
 async function getVfile() {
     console.info(`querying node versions from ${nodeDistUrl}/ ...`);
-    const html = await new Promise((ok, rej) => {
-        const req = https.get(`${nodeDistUrl}/`, res => {
-            let data = '';
-            res.on('data', d => data += d);
-            res.on('close', () => ok(data));
-        });
-        req.on('error', err => rej(err));
-        req.end();
-    });
+    const html = await downloadText(`${nodeDistUrl}/`);
     fs.writeFileSync(vfile, html, { encoding: 'utf-8' });
 }
 
+/**
+ * Find exact or highest aproximate version
+ * @returns {string | undefined} string | undefined
+ */
 function findMatchedVersion() {
+    const frindlyName = String(friendlyNames[versionArg] || versionArg);
     const links = getHtmlLinks(fs.readFileSync(vfile, { encoding: 'utf-8' }))
-        .filter(x => new RegExp(getWantedNodeVersion, 'i').test(x))
-        .sort((a, b) => b.localeCompare(a));
-    const exact = links.find(x => new RegExp(`^${getWantedNodeVersion}$`, 'i').test(x));
-    const aprox = links.find(x => new RegExp(`^v?${getWantedNodeVersion}.*$`, 'i').test(x));
-    return exact || aprox;
+        .filter(x => new RegExp(frindlyName, 'i').test(x));
+    const exact = links
+        .find(x => new RegExp(`^${frindlyName}$`, 'i').test(x));
+    if (exact) return exact;
+    const aprox = links
+        .sort((a, b) => b.localeCompare(a))
+        .find(x => new RegExp(`^v?${frindlyName}.*$`, 'i').test(x));
+    return aprox;
 }
 
+/**
+ * Get list of HTML anchor text
+ * @param {string} html 
+ * @returns {string[]} string[]
+ */
 function getHtmlLinks(html) {
     return html
         .split(/(\r|\n)/g)
@@ -114,16 +143,39 @@ function getHtmlLinks(html) {
                 .split(/<a href=\".+\">/i)[1] || '')
                 .split(/\/?<\/a>/i)[0] || '')
                 .trim();
-            t && p.push(t);
+            if (t) p.push(t);
             return p;
         }, []);
 }
 
-function download(url, file) {
-    return new Promise((ok, rej) => https.get(url, response => {
-        const stream = fs.createWriteStream(file);
-        response.pipe(stream);
-        stream.on('error', err => rej(err));
-        stream.on('finish', () => stream.close(ok));
+/**
+ * Download binary and write to file
+ * @param {string | URL} url 
+ * @param {string | fs.PathLike} file 
+ * @returns {Promise<void>} Promise<void>
+ */
+function downloadBinary(url, file) {
+    return new Promise((ok, rej) => https.get(url, res => {
+        const sw = fs.createWriteStream(file);
+        res.pipe(sw);
+        sw.on('error', err => rej(err));
+        sw.on('finish', () => sw.close(err => err ? rej(err) : ok()));
     }));
+}
+
+/**
+ * Download data as text
+ * @param {string | URL} url 
+ * @returns {Promise<string>} Promise<string>
+ */
+function downloadText(url) {
+    return new Promise((ok, rej) => {
+        const req = https.get(url, res => {
+            let data = '';
+            res.on('data', chunk => data += String(chunk));
+            res.on('close', () => ok(data));
+        });
+        req.on('error', err => rej(err));
+        req.end();
+    });
 }
