@@ -14,6 +14,32 @@ jobs:
         shell: cmd
         run: curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat
 
-      - name: Install nuse and node 14
+      - name: Install node 16
         shell: cmd
-        run: nuse 14
+        run: |
+          nuse 16
+          node test "16" "7"
+
+      - name: Upgrade npm
+        shell: cmd
+        run: |
+          npm i -g npm@8
+          node test "16" "8"
+
+      - name: Install node 14
+        shell: cmd
+        run: |
+          nuse 14
+          node test "14" "6"
+
+      - name: Switch back to node 16 and check persistence
+        shell: cmd
+        run: |
+          nuse 18
+          node test "16" "8"
+
+      - name: Install 'gallium'
+        shell: cmd
+        run: |
+          nuse gallium
+          node test "16" "8"

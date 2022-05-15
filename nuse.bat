@@ -16,6 +16,10 @@ if not exist "%userprofile%\.nuse\nuse.bat" (
     set "nuseInitRegistry=1"
 )
 popd
+if not exist "%userprofile%\.nuse\nuse.ps1" (
+    echo nuse.bat @args > "%userprofile%\.nuse\nuse.ps1"
+    set "nuseInitRegistry=1"
+)
 if not exist "%userprofile%\.nuse\node-latest.exe" (
     echo getting latest node executable %nodeDistUrl%/latest/win-x64/node.exe ...
     curl "%nodeDistUrl%/latest/win-x64/node.exe" -o "%userprofile%\.nuse\node-latest.exe" >nul
