@@ -2,23 +2,24 @@ name: Install and test
 
 on:
   workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths-ignore: ["*.md"]
 
 jobs:
   install-and-test:
     runs-on: windows-latest
     steps:
-    
-    - name: Get public nuse.bat
-      shell: cmd
-      run: |
-        cd %userprofile%
-        curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat
-        
-    - name: Install
-      shell: cmd
-      run: |
-        echo prevent script from pausing
-        echo "" > pause.bat
-        echo install nuse and node 14
-        nuse 14
+      - name: Get public nuse.bat
+        shell: cmd
+        run: |
+          cd %userprofile%
+          curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat
 
+      - name: Install
+        shell: cmd
+        run: |
+          echo prevent script from pausing
+          echo "" > pause.bat
+          echo install nuse and node 14
+          nuse 14
