@@ -29,17 +29,17 @@ jobs:
       - name: Install node 14
         shell: cmd
         run: |
-          nuse 14
+          %userprofile%/.nuse/nuse 14
           node test "14" "6"
 
       - name: Switch back to node 16 and check persistence
         shell: cmd
         run: |
-          nuse 18
+          %userprofile%/.nuse/nuse 18
           node test "16" "8"
 
       - name: Install 'gallium'
         shell: cmd
         run: |
-          nuse gallium
+          %userprofile%/.nuse/nuse gallium
           node test "16" "8"
