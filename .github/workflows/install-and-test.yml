@@ -12,14 +12,8 @@ jobs:
     steps:
       - name: Get public nuse.bat
         shell: cmd
-        run: |
-          cd %userprofile%
-          curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat
+        run: curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat
 
-      - name: Install
+      - name: Install nuse and node 14
         shell: cmd
-        run: |
-          echo prevent script from pausing
-          echo "" > pause.bat
-          echo install nuse and node 14
-          nuse 14
+        run: nuse 14

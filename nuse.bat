@@ -48,7 +48,6 @@ echo [33m npm: v%npmver%[0m
 
 ::cleanup
 if not "%currentPath%"=="%userprofile%\.nuse\nuse.bat" (
-	pause
 	del "%currentPath%"
 	exit
 )

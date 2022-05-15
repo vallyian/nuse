@@ -48,8 +48,7 @@ async function exec() {
                 await downloadBinary(`${nodeDistUrl}/${matchedVersion}/${versionArch}.zip`, `${nodePath}.zip`);
             }
             console.info(`unpacking ${versionArch}.zip ...`);
-            await execCmd('tar', '-xf', `${nodePath}.zip`);
-            if (process.cwd() !== __dirname) fs.renameSync(path.join(process.cwd(), versionArch), nodePath);
+            await execCmd('tar', '-xf', `${nodePath}.zip`, '-C', cwd);
             fs.rmSync(`${nodePath}.zip`, { force: true });
         }
     };

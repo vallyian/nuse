@@ -1,15 +1,19 @@
 # n-use (nuse)
 
-[Node.js](https://nodejs.org/) version switcher / manager for Windows.  
+[Node.js](https://nodejs.org/) version switcher / manager for **Windows**.  
 
 It finds and downloads the latest version according to specified version.  
 The last used `node` is persisted to env, so a new cmd will inherit it automatically.  
 Current cmd will keep its own version (if set) or will use the version set in env.  
 Different cmd instances can use different node versions.  
+Unlike similar tools, this:
+
+* allows friendly node names and matching semver (see [#use](#use) section)
+* updates the matched version if a newer build is published
 
 ## Prerequisites
 
-Windows 10+ x64
+Windows 10 (build [17063](https://docs.microsoft.com/en-us/virtualization/community/team-blog/2017/20171219-tar-and-curl-come-to-windows)+) or Windows 11
 
 ## Install
 
