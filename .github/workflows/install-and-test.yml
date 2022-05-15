@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  greet:
+  install-and-test:
     runs-on: windows-latest
     steps:
     
     - name: Get public nuse.bat
       run: |
-        cd %userprofile%
+        cd $userprofile
         curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat
         
     - name: Install
@@ -19,3 +19,4 @@ jobs:
         echo "" > pause.bat
         echo install nuse and node 14
         nuse 14
+
