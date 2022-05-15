@@ -9,11 +9,13 @@ jobs:
     steps:
     
     - name: Get public nuse.bat
+      shell: cmd
       run: |
-        cd $userprofile
+        cd %userprofile%
         curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat
         
     - name: Install
+      shell: cmd
       run: |
         echo prevent script from pausing
         echo "" > pause.bat
