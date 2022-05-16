@@ -30,7 +30,7 @@ jobs:
 
       - name: Test node 16
         shell: cmd
-        run: node-latest.exe test "16" "7"
+        run: node-latest.exe test 16 7
 
       - name: Upgrade npm
         shell: cmd
@@ -41,7 +41,7 @@ jobs:
 
       - name: Test upgraded npm
         shell: cmd
-        run: node-latest.exe test "16" "8"
+        run: node-latest.exe test 16 8
 
       - name: Install node 14
         shell: cmd
@@ -49,15 +49,15 @@ jobs:
 
       - name: Test node 14
         shell: cmd
-        run: node-latest.exe test "14" "6"
+        run: node-latest.exe test 14 6
 
       - name: Switch back to node 16
         shell: cmd
-        run: nuse.bat 18 %debugger%
+        run: nuse.bat 16 %debugger%
 
       - name: Test npm persistence
         shell: cmd
-        run: node-latest.exe test "16" "8"
+        run: node-latest.exe test 16 8
 
       - name: Install 'gallium'
         shell: cmd
@@ -65,4 +65,4 @@ jobs:
 
       - name: Test 'gallium'
         shell: cmd
-        run: node-latest.exe test "16" "8"
+        run: node-latest.exe test 16 8
