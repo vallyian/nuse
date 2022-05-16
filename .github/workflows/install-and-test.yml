@@ -9,37 +9,60 @@ on:
 jobs:
   install-and-test:
     runs-on: windows-latest
+    env:
+      NUSE_GHA_RUNNER: true
+      nuseDir: .
+
     steps:
-      - name: Get public nuse.bat
+      - name: Disable built-in node.js
         shell: cmd
-        run: curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat
+        run: |
+          for /F "tokens=*" %%x in ('where node') do (set nodepath=%%x)
+          rename "%nodepath%" "node.exe.old"
+          rename "%nodepath:node.exe=npm.cmd%" "npm.cmd.old"
+
+      - name: Checkout
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
 
       - name: Install node 16
         shell: cmd
-        run: |
-          nuse 16
-          node test "16" "7"
+        run: nuse 16 true
+
+      - name: Test node 16
+        shell: cmd
+        run: node-latest.exe test 16 7
 
       - name: Upgrade npm
         shell: cmd
         run: |
-          npm i -g npm@8
-          node test "16" "8"
+          set /p nodepath=<v
+          cd %nodepath%
+          npm.cmd i npm@8
+
+      - name: Test upgraded npm
+        shell: cmd
+        run: node-latest.exe test 16 8
 
       - name: Install node 14
         shell: cmd
-        run: |
-          %userprofile%/.nuse/nuse 14
-          node test "14" "6"
+        run: nuse.bat 14 %debugger%
 
-      - name: Switch back to node 16 and check persistence
+      - name: Test node 14
         shell: cmd
-        run: |
-          %userprofile%/.nuse/nuse 18
-          node test "16" "8"
+        run: node-latest.exe test 14 6
+
+      - name: Switch back to node 16
+        shell: cmd
+        run: nuse.bat 16 %debugger%
+
+      - name: Test npm persistence
+        shell: cmd
+        run: node-latest.exe test 16 8
 
       - name: Install 'gallium'
         shell: cmd
-        run: |
-          %userprofile%/.nuse/nuse gallium
-          node test "16" "8"
+        run: nuse.bat gallium %debugger%
+
+      - name: Test 'gallium'
+        shell: cmd
+        run: node-latest.exe test 16 8
