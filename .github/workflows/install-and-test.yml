@@ -37,7 +37,7 @@ jobs:
         run: |
           for /F "tokens=*" %%x in ('where node') do (set nodepath=%%x)
           cd %nodepath:node.exe=%
-          npm i npm@8
+          npm.cmd i npm@8
 
       - name: Test upgraded npm
         shell: cmd
