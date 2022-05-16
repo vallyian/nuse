@@ -9,6 +9,10 @@ on:
 jobs:
   install-and-test:
     runs-on: windows-latest
+    env:
+      nuseDir: .
+      debugger: "true"
+
     steps:
       - name: Disable built-in node.js
         shell: cmd
@@ -17,22 +21,18 @@ jobs:
           rename "%nodepath%" "node.exe.old"
           rename "%nodepath:node.exe=npm.cmd%" "npm.cmd.old"
 
-      - name: Get public nuse.bat
-        shell: cmd
-        run: curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat
-
       - name: Install node 16
         shell: cmd
-        run: nuse 16
+        run: nuse 16 ${debugger}
 
       - name: Test node 16
         shell: cmd
-        working-directory: "%userprofile%\\.nuse"
+        working-directory: ${nuseDir}
         run: node-latest.exe test "16" "7"
 
       - name: Upgrade npm
         shell: cmd
-        working-directory: "%userprofile%\\.nuse"
+        working-directory: ${nuseDir}
         run: |
           for /F "tokens=*" %%x in ('where node') do (set nodepath=%%x)
           cd %nodepath:node.exe=%
@@ -40,35 +40,35 @@ jobs:
 
       - name: Test upgraded npm
         shell: cmd
-        working-directory: "%userprofile%\\.nuse"
+        working-directory: ${nuseDir}
         run: node-latest.exe test "16" "7"
 
       - name: Install node 14
         shell: cmd
-        working-directory: "%userprofile%\\.nuse"
-        run: nuse 14
+        working-directory: ${nuseDir}
+        run: nuse 14 ${debugger}
 
       - name: Test node 14
         shell: cmd
-        working-directory: "%userprofile%\\.nuse"
+        working-directory: ${nuseDir}
         run: node-latest.exe test "14" "6"
 
       - name: Switch back to node 16
         shell: cmd
-        working-directory: "%userprofile%\\.nuse"
-        run: nuse 18
+        working-directory: ${nuseDir}
+        run: nuse 18 ${debugger}
 
       - name: Test npm persistence
         shell: cmd
-        working-directory: "%userprofile%\\.nuse"
+        working-directory: ${nuseDir}
         run: node-latest.exe test "16" "8"
 
       - name: Install 'gallium'
         shell: cmd
-        working-directory: "%userprofile%\\.nuse"
-        run: nuse gallium
+        working-directory: ${nuseDir}
+        run: nuse gallium ${debugger}
 
       - name: Test 'gallium'
         shell: cmd
-        working-directory: "%userprofile%\\.nuse"
+        working-directory: ${nuseDir}
         run: node-latest.exe test "16" "8"
