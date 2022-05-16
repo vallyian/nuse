@@ -59,6 +59,8 @@ function execCmd(cmd, ...args) {
 
 // test fw
 
+process.on('exit', () => global.tests.failed && process.exit(1));
+
 async function describe(name, cb) {
     if (!global.tests) global.tests = [];
     console.log(`\n\x1b[36m${name}\x1b[0m`);
@@ -67,7 +69,10 @@ async function describe(name, cb) {
         process.stdout.write(`    \x1b[34m${test.name}\x1b[0m ... `);
         process.stdout.write(await Promise.resolve().then(test.cb)
             .then(r => r === 'skip' ? 'skipped\n' : '\x1b[32mpass\x1b[0m\n')
-            .catch(err => `\x1b[31mfail\n        ${err.message || err}\x1b[0m\n`));
+            .catch(err => {
+                global.tests.failed = true;
+                return `\x1b[31mfail\n        ${err.message || err}\x1b[0m\n`);
+            });
     }
     process.stdout.write('\n');
 }
