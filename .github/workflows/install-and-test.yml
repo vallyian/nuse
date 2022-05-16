@@ -10,36 +10,43 @@ jobs:
   install-and-test:
     runs-on: windows-latest
     steps:
+      - name: Disable built-in node.js
+        shell: cmd
+        run: |
+          for /F "tokens=*" %%x in ('where node') do (set nodepath=%%x)
+          rename "%nodepath%" "node.exe.old"
+          rename "%nodepath:node.exe=npm.cmd%" "npm.cmd.old"
+
       - name: Get public nuse.bat
         shell: cmd
-        run: curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat
+        run: curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat || exit /b 1
 
       - name: Install node 16
         shell: cmd
         run: |
-          nuse 16
-          node test "16" "7"
+          nuse 16 || exit /b 1
+          node test "16" "7" || exit /b 1
 
       - name: Upgrade npm
         shell: cmd
         run: |
-          npm i -g npm@8
-          node test "16" "8"
+          npm i -g npm@8 || exit /b 1
+          node test "16" "8" || exit /b 1
 
       - name: Install node 14
         shell: cmd
         run: |
-          %userprofile%/.nuse/nuse 14
-          node test "14" "6"
+          %userprofile%/.nuse/nuse 14 || exit /b 1
+          node test "14" "6" || exit /b 1
 
       - name: Switch back to node 16 and check persistence
         shell: cmd
         run: |
-          %userprofile%/.nuse/nuse 18
-          node test "16" "8"
+          %userprofile%/.nuse/nuse 18 || exit /b 1
+          node test "16" "8" || exit /b 1
 
       - name: Install 'gallium'
         shell: cmd
         run: |
-          %userprofile%/.nuse/nuse gallium
-          node test "16" "8"
+          %userprofile%/.nuse/nuse gallium || exit /b 1
+          node test "16" "8" || exit /b 1
