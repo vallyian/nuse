@@ -18,7 +18,11 @@ jobs:
           rename "%nodepath%" "node.exe.old"
           rename "%nodepath:node.exe=npm.cmd%" "npm.cmd.old"
 
+      - name: Checkout
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
+
       - name: Install node 16
+        shell: cmd
         run: nuse 16 true
 
       - name: Test node 16
@@ -27,7 +31,6 @@ jobs:
 
       - name: Upgrade npm
         shell: cmd
-        working-directory: ${{ env.nuseDIr }}
         run: |
           for /F "tokens=*" %%x in ('where node') do (set nodepath=%%x)
           cd %nodepath:node.exe=%
@@ -47,7 +50,6 @@ jobs:
 
       - name: Switch back to node 16
         shell: cmd
-        working-directory: ${{ env.nuseDIr }}
         run: nuse.bat 18 %debugger%
 
       - name: Test npm persistence
