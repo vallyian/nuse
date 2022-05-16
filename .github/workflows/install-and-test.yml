@@ -10,6 +10,7 @@ jobs:
   install-and-test:
     runs-on: windows-latest
     env:
+      NUSE_GHA_RUNNER: true
       nuseDir: .
 
     steps:
