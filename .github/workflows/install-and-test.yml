@@ -27,12 +27,12 @@ jobs:
 
       - name: Test node 16
         shell: cmd
-        working-directory: $userprofile/.nuse
+        working-directory: "%userprofile%\\.nuse"
         run: node-latest.exe test "16" "7"
 
       - name: Upgrade npm
         shell: cmd
-        working-directory: $userprofile/.nuse
+        working-directory: "%userprofile%\\.nuse"
         run: |
           for /F "tokens=*" %%x in ('where node') do (set nodepath=%%x)
           cd %nodepath:node.exe=%
@@ -40,35 +40,35 @@ jobs:
 
       - name: Test upgraded npm
         shell: cmd
-        working-directory: $userprofile/.nuse
+        working-directory: "%userprofile%\\.nuse"
         run: node-latest.exe test "16" "7"
 
       - name: Install node 14
         shell: cmd
-        working-directory: $userprofile/.nuse
+        working-directory: "%userprofile%\\.nuse"
         run: nuse 14
 
       - name: Test node 14
         shell: cmd
-        working-directory: $userprofile/.nuse
+        working-directory: "%userprofile%\\.nuse"
         run: node-latest.exe test "14" "6"
 
       - name: Switch back to node 16
         shell: cmd
-        working-directory: $userprofile/.nuse
+        working-directory: "%userprofile%\\.nuse"
         run: nuse 18
 
       - name: Test npm persistence
         shell: cmd
-        working-directory: $userprofile/.nuse
+        working-directory: "%userprofile%\\.nuse"
         run: node-latest.exe test "16" "8"
 
       - name: Install 'gallium'
         shell: cmd
-        working-directory: $userprofile/.nuse
+        working-directory: "%userprofile%\\.nuse"
         run: nuse gallium
 
       - name: Test 'gallium'
         shell: cmd
-        working-directory: $userprofile/.nuse
+        working-directory: "%userprofile%\\.nuse"
         run: node-latest.exe test "16" "8"
