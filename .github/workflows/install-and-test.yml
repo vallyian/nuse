@@ -41,7 +41,7 @@ jobs:
 
       - name: Test upgraded npm
         shell: cmd
-        run: node-latest.exe test "16" "7"
+        run: node-latest.exe test "16" "8"
 
       - name: Install node 14
         shell: cmd
