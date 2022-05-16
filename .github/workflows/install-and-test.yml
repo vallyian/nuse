@@ -9,6 +9,8 @@ on:
 jobs:
   install-and-test:
     runs-on: windows-latest
+    env:
+      nuseDir: .
 
     steps:
       - name: Disable built-in node.js
