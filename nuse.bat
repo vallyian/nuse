@@ -65,8 +65,10 @@ echo [33m npm: v%npmver%[0m
 
 ::cleanup
 if not "%currentPath%"=="%nuseDir%\nuse.bat" (
-    if "%debugger%"=="true" echo [34m[debug] currentPath '%currentPath%' != nuseDir '%nuseDir%' [0m
+if not "%nuseDir%"=="." (
+    if "%debugger%"=="true" echo [34m[debug] currentPath '%currentPath%' != '%nuseDir%\nuse.bat' [0m
     if "%debugger%"=="true" echo [34m[debug] del '%currentPath%' [0m
 	del "%currentPath%"
 	exit
+)
 )
