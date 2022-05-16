@@ -10,7 +10,7 @@ jobs:
   install-and-test:
     runs-on: windows-latest
     env:
-      nuseDir: .
+      nuseDir: ${pwd}
       debugger: "true"
 
     steps:
@@ -22,6 +22,7 @@ jobs:
           rename "%nodepath:node.exe=npm.cmd%" "npm.cmd.old"
 
       - name: Install node 16
+        working-directory: ${nuseDir}
         shell: cmd
         run: nuse.bat 16 ${debugger}
 
