@@ -23,7 +23,7 @@ jobs:
 
       - name: Install node 16
         shell: cmd
-        run: nuse 16 ${debugger}
+        run: nuse.bat 16 ${debugger}
 
       - name: Test node 16
         shell: cmd
@@ -46,7 +46,7 @@ jobs:
       - name: Install node 14
         shell: cmd
         working-directory: ${nuseDir}
-        run: nuse 14 ${debugger}
+        run: nuse.bat 14 ${debugger}
 
       - name: Test node 14
         shell: cmd
@@ -56,7 +56,7 @@ jobs:
       - name: Switch back to node 16
         shell: cmd
         working-directory: ${nuseDir}
-        run: nuse 18 ${debugger}
+        run: nuse.bat 18 ${debugger}
 
       - name: Test npm persistence
         shell: cmd
@@ -66,7 +66,7 @@ jobs:
       - name: Install 'gallium'
         shell: cmd
         working-directory: ${nuseDir}
-        run: nuse gallium ${debugger}
+        run: nuse.bat gallium ${debugger}
 
       - name: Test 'gallium'
         shell: cmd
