@@ -19,60 +19,56 @@ jobs:
 
       - name: Get public nuse.bat
         shell: cmd
-        run: |
-          curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat
+        run: curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat
 
       - name: Install node 16
         shell: cmd
-        run: |
-          %userprofile%/.nuse/nuse 16
+        run: nuse 16
 
       - name: Test node 16
         shell: cmd
-        run: |
-          set /p nodeDir=<"%userprofile%/.nuse/v"
-          "%nodeDir%/node.exe" test "16" "7"
+        working-directory: $userprofile/.nuse
+        run: node-latest.exe test "16" "7"
 
       - name: Upgrade npm
         shell: cmd
+        working-directory: $userprofile/.nuse
         run: |
-          npm i -g npm@8
+          for /F "tokens=*" %%x in ('where node') do (set nodepath=%%x)
+          cd %nodepath:node.exe=%
+          npm i npm@8
 
       - name: Test upgraded npm
         shell: cmd
-        run: |
-          set /p nodeDir=<"%userprofile%/.nuse/v"
-          "%nodeDir%/node.exe" test "16" "8"
+        working-directory: $userprofile/.nuse
+        run: node-latest.exe test "16" "7"
 
       - name: Install node 14
         shell: cmd
-        run: |
-          %userprofile%/.nuse/nuse 14
+        working-directory: $userprofile/.nuse
+        run: nuse 14
 
       - name: Test node 14
         shell: cmd
-        run: |
-          set /p nodeDir=<"%userprofile%/.nuse/v"
-          "%nodeDir%/node.exe" test "14" "6"
+        working-directory: $userprofile/.nuse
+        run: node-latest.exe test "14" "6"
 
       - name: Switch back to node 16
         shell: cmd
-        run: |
-          %userprofile%/.nuse/nuse 18
+        working-directory: $userprofile/.nuse
+        run: nuse 18
 
       - name: Test npm persistence
         shell: cmd
-        run: |
-          set /p nodeDir=<"%userprofile%/.nuse/v"
-          "%nodeDir%/node.exe" test "16" "8"
+        working-directory: $userprofile/.nuse
+        run: node-latest.exe test "16" "8"
 
       - name: Install 'gallium'
         shell: cmd
-        run: |
-          %userprofile%/.nuse/nuse gallium
+        working-directory: $userprofile/.nuse
+        run: nuse gallium
 
       - name: Test 'gallium'
         shell: cmd
-        run: |
-          set /p nodeDir=<"%userprofile%/.nuse/v"
-          "%nodeDir%/node.exe" test "16" "8"
+        working-directory: $userprofile/.nuse
+        run: node-latest.exe test "16" "8"
