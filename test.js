@@ -71,8 +71,8 @@ async function describe(name, cb) {
             .then(r => r === 'skip' ? 'skipped\n' : '\x1b[32mpass\x1b[0m\n')
             .catch(err => {
                 global.tests.failed = true;
-                return `\x1b[31mfail\n        ${err.message || err}\x1b[0m\n`);
-            });
+                return `\x1b[31mfail\n        ${err.message || err}\x1b[0m\n`;
+            }));
     }
     process.stdout.write('\n');
 }
