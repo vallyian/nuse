@@ -9,8 +9,6 @@ on:
 jobs:
   install-and-test:
     runs-on: windows-latest
-    env:
-      debugger: "true"
 
     steps:
       - name: Disable built-in node.js
@@ -21,8 +19,7 @@ jobs:
           rename "%nodepath:node.exe=npm.cmd%" "npm.cmd.old"
 
       - name: Install node 16
-        shell: cmd
-        run: nuse.bat 16 %debugger%
+        run: nuse 16 true
 
       - name: Test node 16
         shell: cmd
