@@ -22,18 +22,18 @@ jobs:
           rename "%nodepath:node.exe=npm.cmd%" "npm.cmd.old"
 
       - name: Install node 16
-        working-directory: "%nuseDIr%"
+        working-directory: ${{ env.nuseDIr }}
         shell: cmd
         run: nuse.bat 16 ${debugger}
 
       - name: Test node 16
         shell: cmd
-        working-directory: "%nuseDIr%"
+        working-directory: ${{ env.nuseDIr }}
         run: node-latest.exe test "16" "7"
 
       - name: Upgrade npm
         shell: cmd
-        working-directory: "%nuseDIr%"
+        working-directory: ${{ env.nuseDIr }}
         run: |
           for /F "tokens=*" %%x in ('where node') do (set nodepath=%%x)
           cd %nodepath:node.exe=%
@@ -41,35 +41,35 @@ jobs:
 
       - name: Test upgraded npm
         shell: cmd
-        working-directory: "%nuseDIr%"
+        working-directory: ${{ env.nuseDIr }}
         run: node-latest.exe test "16" "7"
 
       - name: Install node 14
         shell: cmd
-        working-directory: "%nuseDIr%"
+        working-directory: ${{ env.nuseDIr }}
         run: nuse.bat 14 ${debugger}
 
       - name: Test node 14
         shell: cmd
-        working-directory: "%nuseDIr%"
+        working-directory: ${{ env.nuseDIr }}
         run: node-latest.exe test "14" "6"
 
       - name: Switch back to node 16
         shell: cmd
-        working-directory: "%nuseDIr%"
+        working-directory: ${{ env.nuseDIr }}
         run: nuse.bat 18 ${debugger}
 
       - name: Test npm persistence
         shell: cmd
-        working-directory: "%nuseDIr%"
+        working-directory: ${{ env.nuseDIr }}
         run: node-latest.exe test "16" "8"
 
       - name: Install 'gallium'
         shell: cmd
-        working-directory: "%nuseDIr%"
+        working-directory: ${{ env.nuseDIr }}
         run: nuse.bat gallium ${debugger}
 
       - name: Test 'gallium'
         shell: cmd
-        working-directory: "%nuseDIr%"
+        working-directory: ${{ env.nuseDIr }}
         run: node-latest.exe test "16" "8"
