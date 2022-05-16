@@ -10,8 +10,10 @@ describe('nuse', () => {
         assert.fail(`invalid test run args`);
 
     it('user env nuseDir is set', async () => {
-        nuseDir = await execCmd('reg', 'query', 'HKCU\\Environment', '/v', 'nuseDir')
-            .then(x => (x.trim().split(/\s{4}/g)[3] || ''));
+        nuseDir = process.env.NUSE_GHA_RUNNER
+            ? process.env.nuseDir
+            : await execCmd('reg', 'query', 'HKCU\\Environment', '/v', 'nuseDir')
+                .then(x => (x.trim().split(/\s{4}/g)[3] || ''));
         expect(nuseDir).not.toEqual('');
     });
 
