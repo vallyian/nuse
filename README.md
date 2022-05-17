@@ -24,9 +24,20 @@ Windows 10 (build [17063](https://docs.microsoft.com/en-us/virtualization/commun
 
 `nuse   number | semver | friendly-name | -v | -h [debugger]`
 
-* `nuse gallium` => `v16.9.1`
+where:
+
+* `number`: node major version (e.g. 16)
+* `semver`: node semver version (e.g. 16.9 or 16.9.1)
+* `friendly-name`: node friendly-name version (e.g. gallium or hydrogen)
+* `-v`: prints the current node and npm versions
+* `-h`: echoes back the usage
+* `debugger`: outputs debug messages if true (other values are considered false); default is false 
+
+### Examples
+
 * `nuse 16` => `v16.9.1`
 * `nuse 16.9` => `v16.9.1`
 * `nuse 16.8` => `v16.8.0`
 * `nuse 16.8.0` => `v16.8.0`
+* `nuse gallium` => `v16.9.1`
 * `nuse 16.42.42` => `version not found`
