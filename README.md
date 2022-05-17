@@ -22,7 +22,7 @@ Windows 10 (build [17063](https://docs.microsoft.com/en-us/virtualization/commun
 
 ## Use
 
-`nuse   number | semver | friendly-name | -v | -h`
+`nuse   number | semver | friendly-name | -v | -h [debugger]`
 
 * `nuse gallium` => `v16.9.1`
 * `nuse 16` => `v16.9.1`

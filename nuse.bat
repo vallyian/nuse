@@ -59,7 +59,6 @@ set "PATH=%nodeDir%;%path%"
 ::print versions
 for /F "tokens=*" %%x in ('node -v') do (set nodever=%%x)
 for /F "tokens=*" %%x in ('npm -v') do (set npmver=%%x)
-for /F %%a in ('echo prompt $E ^| cmd') do @set "ESC=%a"
 echo [33mnode: %nodever%[0m
 echo [33m npm: v%npmver%[0m
 
