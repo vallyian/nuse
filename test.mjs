@@ -3,25 +3,27 @@ import child_process from 'child_process';
 
 test('nuse', async t => {
     const [nodev, npmv] = process.argv.splice(2);
+    let [nuseDir, nodeDir] = ['', ''];
 
-    let [nuseDir, nodeDir] = [];
+    await t.test('user env includes', async t => {
+        await t.test('nuseDir', async () => {
+             nuseDir = process.env.NUSE_GHA_RUNNER === 'true'
+                 ? process.env.nuseDir
+                 : await execCmd('reg', 'query', 'HKCU\\Environment', '/v', 'nuseDir').then(x => x.trim().split(/\s{4}/g)[3] || '');
 
-    await (async function beforeAll() {
-        nuseDir = process.env.NUSE_GHA_RUNNER === 'true'
-            ? process.env.nuseDir
-            : await execCmd('reg', 'query', 'HKCU\\Environment', '/v', 'nuseDir').then(x => (x.trim().split(/\s{4}/g)[3] || ''));
-        nodeDir = await execCmd('reg', 'query', 'HKCU\\Environment', '/v', 'nodeDir').then(x => (x.trim().split(/\s{4}/g)[3] || ''));
-    })();
+            expect(nuseDir).not.toEqual('');
+        });
 
-    await t.test('user env includes', t => Promise.all([
-        t.test('nuseDir', () => expect(nuseDir).not.toEqual('')),
-        t.test('nodeDir', () => expect(nodeDir).not.toEqual(''))
-    ]));
+        await t.test('nodeDir', async () => {
+             nodeDir = await execCmd('reg', 'query', 'HKCU\\Environment', '/v', 'nodeDir').then(x => x.trim().split(/\s{4}/g)[3] || '');
+
+             expect(nodeDir).not.toEqual('');
+        });
+    });
 
     await t.test('user env Path includes', async t => {
         const userPath = await execCmd('reg', 'query', 'HKCU\\Environment', '/v', 'Path')
-            .then(x => (x.trim().split(/\s{4}/g)[3] || '').split(";"))
-            .catch(() => ([]));
+            .then(x => (x.trim().split(/\s{4}/g)[3] || '').split(';'));
 
         await t.test('%nuseDir%', () => expect(userPath).toInclude('%nuseDir%'));
         await t.test('%nodeDir%', () => expect(userPath).toInclude('%nodeDir%'));
