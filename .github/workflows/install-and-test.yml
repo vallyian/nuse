@@ -12,6 +12,7 @@ jobs:
     env:
       NUSE_GHA_RUNNER: true
       nuseDir: .
+      debugger: true
 
     steps:
       - name: Disable built-in node.js
@@ -30,39 +31,41 @@ jobs:
 
       - name: Test node 16
         shell: cmd
-        run: node-latest.exe test 16 7
+        run: node-latest.exe test.mjs 16 7
 
       - name: Upgrade npm
         shell: cmd
         run: |
+          setlocal
           set /p nodepath=<v
           cd %nodepath%
+          endlocal
           npm.cmd i npm@8
 
       - name: Test upgraded npm
         shell: cmd
-        run: node-latest.exe test 16 8
+        run: node-latest.exe test.mjs 16 8
 
       - name: Install node 14
         shell: cmd
-        run: nuse.bat 14 %debugger%
+        run: nuse.bat 14 ${{ env.debugger }}
 
       - name: Test node 14
         shell: cmd
-        run: node-latest.exe test 14 6
+        run: node-latest.exe test.mjs 14 6
 
       - name: Switch back to node 16
         shell: cmd
-        run: nuse.bat 16 %debugger%
+        run: nuse.bat 16 ${{ env.debugger }}
 
       - name: Test npm persistence
         shell: cmd
-        run: node-latest.exe test 16 8
+        run: node-latest.exe test.mjs 16 8
 
       - name: Install 'gallium'
         shell: cmd
-        run: nuse.bat gallium %debugger%
+        run: nuse.bat gallium ${{ env.debugger }}
 
       - name: Test 'gallium'
         shell: cmd
-        run: node-latest.exe test 16 8
+        run: node-latest.exe test.mjs 16 8
