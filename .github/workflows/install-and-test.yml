@@ -2,9 +2,9 @@ name: Install and test
 
 on:
   workflow_dispatch:
+  pull_request:
   push:
-    branches: ["main"]
-    paths-ignore: ["*.md"]
+  release:
 
 jobs:
   install-and-test:
