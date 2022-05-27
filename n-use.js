@@ -39,7 +39,7 @@ async function exec() {
             .then(x => x.trim().split(/\s{4}/g)[3]);
     } else {
         const matchedVersion = await getMatchedVersion();
-        const versionArch = `node-${matchedVersion}-win-${os.arch()}`;
+        const versionArch = `node-${matchedVersion}-win-x64`;
         nodePath = path.join(cwd, versionArch);
 
         if (!fs.existsSync(nodePath)) {

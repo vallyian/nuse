@@ -13,11 +13,14 @@ Unlike similar tools, this:
 
 ## Prerequisites
 
-Windows 10 (build [17063](https://docs.microsoft.com/en-us/virtualization/community/team-blog/2017/20171219-tar-and-curl-come-to-windows)+) or Windows 11
+Windows 10 x64 (build [17063](https://docs.microsoft.com/en-us/virtualization/community/team-blog/2017/20171219-tar-and-curl-come-to-windows)+) or Windows 11 x64
 
 ## Install
 
-1. `curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat`
+1. download main script
+   * `curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat` (latest version)
+   * `curl https://raw.githubusercontent.com/vallyian/nuse/1.0.0/nuse.bat -o nuse.bat` (specific version)
+   * `curl https://raw.githubusercontent.com/vallyian/nuse/5b402c85312d93177572a2e47d43ba762041fda2/nuse.bat -o nuse.bat` (fixed SHA - if security is very important to you)
 2. `nuse` *wanted-version* (ie `nuse 18`)
 
 ## Use
