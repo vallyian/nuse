@@ -36,10 +36,8 @@ jobs:
       - name: Upgrade npm
         shell: cmd
         run: |
-          setlocal
           set /p nodepath=<v
           cd %nodepath%
-          endlocal
           npm.cmd i npm@8
 
       - name: Test upgraded npm
