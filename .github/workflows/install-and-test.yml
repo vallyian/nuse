@@ -25,13 +25,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
 
-      - name: Install node 16
+      - name: Install node 16.9
         shell: cmd
-        run: nuse 16 true
+        run: nuse 16.9 true
 
-      - name: Test node 16
+      - name: Test node 16.9
         shell: cmd
-        run: node-latest.exe test.mjs 16 7
+        run: node-latest.exe test.mjs 16.9 7
 
       - name: Upgrade npm
         shell: cmd
@@ -42,7 +42,7 @@ jobs:
 
       - name: Test upgraded npm
         shell: cmd
-        run: node-latest.exe test.mjs 16 8
+        run: node-latest.exe test.mjs 16.9 8
 
       - name: Install node 14
         shell: cmd
@@ -52,13 +52,13 @@ jobs:
         shell: cmd
         run: node-latest.exe test.mjs 14 6
 
-      - name: Switch back to node 16
+      - name: Switch back to node 16.9
         shell: cmd
-        run: nuse.bat 16 ${{ env.debugger }}
+        run: nuse.bat 16.9 ${{ env.debugger }}
 
       - name: Test npm persistence
         shell: cmd
-        run: node-latest.exe test.mjs 16 8
+        run: node-latest.exe test.mjs 16.9 8
 
       - name: Install 'gallium'
         shell: cmd
