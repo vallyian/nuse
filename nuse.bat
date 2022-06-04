@@ -63,7 +63,6 @@ for /F "tokens=*" %%x in ('node -v') do (set nodever=%%x)
 for /F "tokens=*" %%x in ('npm -v') do (set npmver=%%x)
 @echo [33mnode: %nodever%[0m
 @echo [33m npm: v%npmver%[0m
-@echo[
 
 ::cleanup
 if not "%currentPath%"=="%nuseDir%\nuse.bat" (

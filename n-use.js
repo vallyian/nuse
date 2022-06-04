@@ -120,15 +120,27 @@ async function getVfile() {
  * @returns {string | undefined} string | undefined
  */
 function findMatchedVersion() {
-    const frindlyName = String(friendlyNames[versionArg] || versionArg);
-    const links = getHtmlLinks(fs.readFileSync(vfile, { encoding: 'utf-8' }))
-        .filter(x => new RegExp(frindlyName, 'i').test(x));
-    const exact = links
-        .find(x => new RegExp(`^${frindlyName}$`, 'i').test(x));
+    const friendlyName = friendlyNames[versionArg] || versionArg;
+    const versions = getHtmlLinks(fs.readFileSync(vfile, { encoding: 'utf-8' }))
+        .filter(x => /^v\d+\.\d+\.\d+\/$/.test(x))
+        .map(x => x.replace(/\/$/, ''))
+        .sort((a, b) => { 
+            a = a.replace(/^v/g, '').split('.').map(n => +n);
+            b = b.replace(/^v/g, '').split('.').map(n => +n);
+            return (
+                a[0] > b[0] ? -1 :
+                a[0] - b[0] ? 1 :
+                    a[1] > b[1] ? -1 :
+                    a[1] - b[1] ? 1 :
+                        a[2] > b[2] ? -1 :
+                        a[2] - b[2] ? 1 :
+            0);
+        });
+
+    const exact = versions.find(x => new RegExp(`^v${friendlyName}$`, 'i').test(x));
     if (exact) return exact;
-    const aprox = links
-        .sort((a, b) => b.localeCompare(a))
-        .find(x => new RegExp(`^v?${frindlyName}.*$`, 'i').test(x));
+
+    const aprox = versions.find(x => new RegExp(`^v${friendlyName}`, 'i').test(x));
     return aprox;
 }
 
@@ -143,7 +155,7 @@ function getHtmlLinks(html) {
         .reduce((p, t) => {
             t = ((t
                 .split(/<a href=\".+\">/i)[1] || '')
-                .split(/\/?<\/a>/i)[0] || '')
+                .split(/<\/a>/i)[0] || '')
                 .trim();
             if (t) p.push(t);
             return p;
