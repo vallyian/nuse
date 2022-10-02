@@ -38,7 +38,7 @@ async function exec() {
         nodePath = await execCmd('reg', 'query', 'HKCU\\Environment', '/v', 'nodeDir')
             .then(x => x.trim().split(/\s{4}/g)[3]);
     } else {
-        const matchedVersion = getMatchedVersion();
+        const matchedVersion = await getMatchedVersion();
         const versionArch = `node-${matchedVersion}-win-x64`;
         nodePath = path.join(cwd, versionArch);
 
@@ -89,7 +89,7 @@ async function initRegistry() {
 
 /**
  * Get exact or highest aproximate version
- * @returns {string} stirng
+ * @returns {Promise<string>} stirng
  */
 async function getMatchedVersion() {
     if (!fs.existsSync(vfile))
