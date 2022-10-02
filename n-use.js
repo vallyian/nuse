@@ -38,7 +38,7 @@ async function exec() {
         nodePath = await execCmd('reg', 'query', 'HKCU\\Environment', '/v', 'nodeDir')
             .then(x => x.trim().split(/\s{4}/g)[3]);
     } else {
-        const matchedVersion = await getMatchedVersion();
+        const matchedVersion = getMatchedVersion();
         const versionArch = `node-${matchedVersion}-win-x64`;
         nodePath = path.join(cwd, versionArch);
 
@@ -51,10 +51,10 @@ async function exec() {
             await execCmd('tar', '-xf', `${nodePath}.zip`, '-C', cwd);
             fs.rmSync(`${nodePath}.zip`, { force: true });
         }
-    };
+    }
 
     fs.writeFileSync(nuseDirFile, nodePath, { encoding: 'utf-8' });
-};
+}
 
 /**
  * Exec cmd in current dir
@@ -127,14 +127,13 @@ function findMatchedVersion() {
         .sort((a, b) => { 
             a = a.replace(/^v/g, '').split('.').map(n => +n);
             b = b.replace(/^v/g, '').split('.').map(n => +n);
-            return (
-                a[0] > b[0] ? -1 :
-                a[0] - b[0] ? 1 :
-                    a[1] > b[1] ? -1 :
-                    a[1] - b[1] ? 1 :
-                        a[2] > b[2] ? -1 :
-                        a[2] - b[2] ? 1 :
-            0);
+            if (a[0] > b[0]) return -1;
+            if (a[0] - b[0]) return 1;
+            if (a[1] > b[1]) return -1;
+            if (a[1] - b[1]) return 1;
+            if (a[2] > b[2]) return -1;
+            if (a[2] - b[2]) return 1;
+            return 0;
         });
 
     const exact = versions.find(x => new RegExp(`^v${friendlyName}$`, 'i').test(x));
@@ -151,7 +150,7 @@ function findMatchedVersion() {
  */
 function getHtmlLinks(html) {
     return html
-        .split(/(\r|\n)/g)
+        .split(/[\r\n]/g)
         .reduce((p, t) => {
             t = ((t
                 .split(/<a href=\".+\">/i)[1] || '')

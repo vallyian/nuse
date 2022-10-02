@@ -59,10 +59,12 @@ setx nodeDir "%nodeDir%" >nul
 set "PATH=%nodeDir%;%path%"
 
 ::print versions
+@echo|set /p="[33mnode: [0m"
 for /F "tokens=*" %%x in ('node -v') do (set nodever=%%x)
+@echo [33m%nodever%[0m
+@echo|set /p="[33m npm: [0m"
 for /F "tokens=*" %%x in ('npm -v') do (set npmver=%%x)
-@echo [33mnode: %nodever%[0m
-@echo [33m npm: v%npmver%[0m
+@echo [33mv%npmver%[0m
 
 ::cleanup
 if not "%currentPath%"=="%nuseDir%\nuse.bat" (
