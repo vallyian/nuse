@@ -1,9 +1,9 @@
-const assert = require('assert');
-const child_process = require('child_process');
-const fs = require('fs');
-const https = require('https');
-const os = require('os');
-const path = require('path');
+const assert = require('node:assert');
+const child_process = require('node:child_process');
+const fs = require('node:fs');
+const https = require('node:https');
+const os = require('node:os');
+const path = require('node:path');
 
 const { nuseInitRegistry, nodeDistUrl, nuseDirFile } = process.env;
 const [versionArg] = process.argv.splice(2);
