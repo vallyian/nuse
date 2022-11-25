@@ -1,5 +1,5 @@
+import child_process from 'node:child_process';
 import test from 'node:test';
-import child_process from 'child_process';
 
 test('nuse', async t => {
     const [nodev, npmv] = process.argv.splice(2);
