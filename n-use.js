@@ -9,7 +9,7 @@ const { nuseInitRegistry, nodeDistUrl, nuseDirFile } = process.env;
 const [versionArg] = process.argv.splice(2);
 const cwd = __dirname;
 const vfile = path.join(cwd, 'v.html');
-const codenNames /* https://github.com/nodejs/Release/blob/main/CODENAMES.md */ = {
+const codenNames = {
     argon: 4,
     boron: 6,
     carbon: 8,

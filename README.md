@@ -8,7 +8,7 @@ Current cmd will keep its own version (if set) or will use the version set in en
 Different cmd instances can use different node versions.  
 Unlike similar tools, this:
 
-* allows node code-names and matching semver (see [#use](#use) section)
+* allows node [code-names](https://github.com/nodejs/Release/blob/main/CODENAMES.md) and matching semver (see [#use](#use) section)
 * updates the matched version if a newer build is published
 
 ## Prerequisites
@@ -30,9 +30,9 @@ Windows 10 x64 (build [17063](https://docs.microsoft.com/en-us/virtualization/co
 
 where:
 
-* `number`: node major version (e.g. 16)
-* `semver`: node semver (e.g. 16.9 or 16.9.1)
-* `code-name`: node code-name (e.g. gallium or hydrogen)
+* `number`: node "major version" (e.g. 16)
+* `semver`: node "semver" (e.g. 16.9 or 16.9.1)
+* `code-name`: node "code-name" (e.g. gallium or hydrogen)
 * `-v`: prints the current node and npm versions
 * `-h`: echoes back the usage
 * `debugger`: outputs debug messages if value is "true" (defaults to false)
