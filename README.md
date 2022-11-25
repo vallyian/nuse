@@ -18,9 +18,9 @@ Windows 10 x64 (build [17063](https://docs.microsoft.com/en-us/virtualization/co
 ## Install
 
 1. download main script
-   * latest version: `curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat`
-   * specific version: `curl https://raw.githubusercontent.com/vallyian/nuse/1.0.0/nuse.bat -o nuse.bat`
-   * immutable SHA: `curl https://raw.githubusercontent.com/vallyian/nuse/5b402c85312d93177572a2e47d43ba762041fda2/nuse.bat -o nuse.bat` (if security is very important to you)
+   * latest version (main): `curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat`
+   * specific version (tag): `curl https://raw.githubusercontent.com/vallyian/nuse/1.3.0/nuse.bat -o nuse.bat`
+   * specific SHA: `curl https://raw.githubusercontent.com/vallyian/nuse/be91101c99fe11bfa1c156e5f2a89fad3093529f/nuse.bat -o nuse.bat` (immutable commit, if security is very important to you)
 2. (recommended) inspect the downloaded script before executing first time
 3. `nuse` *wanted-version* (ie `nuse 18`)
 
