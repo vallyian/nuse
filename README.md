@@ -8,7 +8,7 @@ Current cmd will keep its own version (if set) or will use the version set in en
 Different cmd instances can use different node versions.  
 Unlike similar tools, this:
 
-* allows friendly node names and matching semver (see [#use](#use) section)
+* allows node code-names and matching semver (see [#use](#use) section)
 * updates the matched version if a newer build is published
 
 ## Prerequisites
@@ -18,23 +18,24 @@ Windows 10 x64 (build [17063](https://docs.microsoft.com/en-us/virtualization/co
 ## Install
 
 1. download main script
-   * `curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat` (latest version)
-   * `curl https://raw.githubusercontent.com/vallyian/nuse/1.0.0/nuse.bat -o nuse.bat` (specific version)
-   * `curl https://raw.githubusercontent.com/vallyian/nuse/5b402c85312d93177572a2e47d43ba762041fda2/nuse.bat -o nuse.bat` (fixed SHA - if security is very important to you)
-2. `nuse` *wanted-version* (ie `nuse 18`)
+   * latest version: `curl https://raw.githubusercontent.com/vallyian/nuse/main/nuse.bat -o nuse.bat`
+   * specific version: `curl https://raw.githubusercontent.com/vallyian/nuse/1.0.0/nuse.bat -o nuse.bat`
+   * immutable SHA: `curl https://raw.githubusercontent.com/vallyian/nuse/5b402c85312d93177572a2e47d43ba762041fda2/nuse.bat -o nuse.bat` (if security is very important to you)
+2. (recommended) inspect the downloaded script before executing first time
+3. `nuse` *wanted-version* (ie `nuse 18`)
 
 ## Use
 
-`nuse   number | semver | friendly-name | -v | -h [debugger]`
+`nuse   number | semver | code-name | -v | -h [debugger]`
 
 where:
 
 * `number`: node major version (e.g. 16)
-* `semver`: node semver version (e.g. 16.9 or 16.9.1)
-* `friendly-name`: node friendly-name version (e.g. gallium or hydrogen)
+* `semver`: node semver (e.g. 16.9 or 16.9.1)
+* `code-name`: node code-name (e.g. gallium or hydrogen)
 * `-v`: prints the current node and npm versions
 * `-h`: echoes back the usage
-* `debugger`: outputs debug messages if true (other values are considered false); default is false 
+* `debugger`: outputs debug messages if value is "true" (defaults to false)
 
 ### Examples
 

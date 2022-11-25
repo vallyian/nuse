@@ -9,7 +9,7 @@ const { nuseInitRegistry, nodeDistUrl, nuseDirFile } = process.env;
 const [versionArg] = process.argv.splice(2);
 const cwd = __dirname;
 const vfile = path.join(cwd, 'v.html');
-const friendlyNames = {
+const codenNames /* https://github.com/nodejs/Release/blob/main/CODENAMES.md */ = {
     argon: 4,
     boron: 6,
     carbon: 8,
@@ -17,7 +17,9 @@ const friendlyNames = {
     erbium: 12,
     fermium: 14,
     gallium: 16,
-    hydrogen: 18
+    hydrogen: 18,
+    iron: 20,
+    jod: 22
 };
 
 Promise.resolve().then(exec).catch(e => {
@@ -120,11 +122,11 @@ async function getVfile() {
  * @returns {string | undefined} string | undefined
  */
 function findMatchedVersion() {
-    const friendlyName = friendlyNames[versionArg] || versionArg;
+    const codeName = codenNames[versionArg] || versionArg;
     const versions = getHtmlLinks(fs.readFileSync(vfile, { encoding: 'utf-8' }))
         .filter(x => /^v\d+\.\d+\.\d+\/$/.test(x))
         .map(x => x.replace(/\/$/, ''))
-        .sort((a, b) => { 
+        .sort((a, b) => {
             a = a.replace(/^v/g, '').split('.').map(n => +n);
             b = b.replace(/^v/g, '').split('.').map(n => +n);
             if (a[0] > b[0]) return -1;
@@ -136,10 +138,10 @@ function findMatchedVersion() {
             return 0;
         });
 
-    const exact = versions.find(x => new RegExp(`^v${friendlyName}$`, 'i').test(x));
+    const exact = versions.find(x => new RegExp(`^v${codeName}$`, 'i').test(x));
     if (exact) return exact;
 
-    const aprox = versions.find(x => new RegExp(`^v${friendlyName}`, 'i').test(x));
+    const aprox = versions.find(x => new RegExp(`^v${codeName}`, 'i').test(x));
     return aprox;
 }
 
